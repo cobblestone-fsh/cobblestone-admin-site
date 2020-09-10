@@ -8,6 +8,8 @@ const Auth0Strategy = require('passport-auth0');
 
 const { ADMIN_WHITELIST } = require('./config');
 
+const adminRouter = require('./admin');
+
 const app = express();
 
 store = new MongoDBStore({
@@ -95,8 +97,6 @@ function adminGuard(req, res, next) {
   }
 }
 
-app.get('/admin', adminGuard, (req, res) => {
-  res.send("ADMIN");
-});
+app.use('/admin', adminGuard, adminRouter);
 
 module.exports = app;

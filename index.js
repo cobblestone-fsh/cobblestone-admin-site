@@ -1,6 +1,8 @@
 
 require('./config');
 
+require('./db');
+
 const app = require('./router');
 
 app.listen(parseInt(process.env.SERVER_PORT), () => {
