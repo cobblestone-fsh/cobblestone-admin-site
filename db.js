@@ -18,7 +18,7 @@ const Predictor = conn.model(`predictor`, new mongoose.Schema({
 const Prediction = conn.model(`prediction`, new mongoose.Schema({
   name: String,
   summary: { type: String, required: true },
-  predictor: mongoose.ObjectId,
+  predictor: { type: mongoose.ObjectId, ref: 'predictor' },
   details: String,
   notes: String,
   imgUrl: String,
@@ -27,22 +27,17 @@ const Prediction = conn.model(`prediction`, new mongoose.Schema({
   estimatedConfidence: Number,
   estimatedSpecificity: Number,
   estimatedResolution: Date,
-  isResolved: Boolean
-}));
-
-const Resolution = conn.model(`resolution`, new mongoose.Schema({
-  prediction: mongoose.ObjectId,
-  timeResolved: Date,
-  actualSignificance: Number,
+  actualSignficance: Number,
   actualConfidence: Number,
   actualSpecificity: Number,
   bonusAdjustment: Number,
-  notes: String
+  resolutionNotes: String,
+  isResolved: Boolean,
+  timeResolved: Date
 }));
 
 module.exports = {
   Predictor,
-  Prediction,
-  Resolution
+  Prediction
 };
 
