@@ -23,17 +23,19 @@ const Prediction = conn.model(`prediction`, new mongoose.Schema({
   notes: String,
   imgUrl: String,
   link: String,
-  estimatedSignificance: Number,
-  estimatedConfidence: Number,
-  estimatedSpecificity: Number,
+  estimatedSignificance: { type: Number, default: 2 },
+  estimatedConfidence: { type: Number, default: 0 },
+  estimatedSpecificity: { type: Number, default: 0 },
   estimatedResolution: Date,
-  actualSignficance: Number,
-  actualConfidence: Number,
-  actualSpecificity: Number,
-  bonusAdjustment: Number,
+  actualSignficance: { type: Number, default: 2 },
+  actualConfidence: { type: Number, default: 0 },
+  actualSpecificity: { type: Number, default: 0 },
+  bonusAdjustment: { type: Number, default: 0 },
   resolutionNotes: String,
-  isResolved: Boolean,
-  timeResolved: Date
+  isResolved: { type: Boolean, default: false },
+  isResolvedTrue: Boolean,
+  timeResolved: Date,
+  creditGiven: { type: Boolean, default: false }
 }));
 
 module.exports = {
