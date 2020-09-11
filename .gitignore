@@ -5,3 +5,7 @@
 .adminbro/
 
 **/node_modules/
+
+dump/
+
+s3_sync.sh

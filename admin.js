@@ -3,7 +3,7 @@ const AdminBro = require('admin-bro');
 const AdminBroExpress = require('@admin-bro/express');
 const AdminBroMongoose = require('@admin-bro/mongoose');
 
-const { Predictor, Prediction } = require('./db');
+const { Predictor, Prediction, Tweet } = require('./db');
 
 async function resolvePrediction(req, res, ctx, isTrue) {
 
@@ -83,6 +83,11 @@ const adminBro = new AdminBro({
           isVisible: true,
           handler: resolvePredictionFalse
         }
+      }
+    }},
+    { resource: Tweet, options: {
+      properties: {
+        text: { type: 'textarea' }
       }
     }}
   ]

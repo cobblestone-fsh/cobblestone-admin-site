@@ -38,8 +38,14 @@ const Prediction = conn.model(`prediction`, new mongoose.Schema({
   creditGiven: { type: Boolean, default: false }
 }));
 
+// have to do this to avoid Twitter API application
+const Tweet = conn.model('tweet', new mongoose.Schema({
+  text: String
+}));
+
 module.exports = {
   Predictor,
-  Prediction
+  Prediction, 
+  Tweet
 };
 
