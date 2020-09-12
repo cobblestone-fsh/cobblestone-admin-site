@@ -23,6 +23,7 @@ const Prediction = conn.model(`prediction`, new mongoose.Schema({
   notes: String,
   imgUrl: String,
   link: String,
+  qualifiedCategory: String, // like 2020.president.trump
   estimatedSignificance: { type: Number, default: 2 },
   estimatedConfidence: { type: Number, default: 0 },
   estimatedSpecificity: { type: Number, default: 0 },

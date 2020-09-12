@@ -63,7 +63,7 @@ const adminBro = new AdminBro({
       }
     }},
     { resource: Prediction, options: {
-      listProperties: ['name', 'predictor', 'isResolved'],
+      listProperties: ['name', 'predictor', 'qualifiedCategory', 'isResolved'],
       properties: {
         details: { type: 'textarea' },
         notes: { type: 'textarea' },

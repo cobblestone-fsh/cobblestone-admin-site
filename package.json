@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "backup": "mongodump -d cobblestone --forceTableScan && bash ./s3_sync.sh"
+    "backup": "mongodump -d cobblestone --forceTableScan && bash ./s3_sync.sh",
+    "copy:models": "cp ./db.js ../predictions-site/"
   },
   "author": "Cobblestone Age Prude",
   "license": "ISC",
