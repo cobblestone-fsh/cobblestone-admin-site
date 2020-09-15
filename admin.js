@@ -29,8 +29,9 @@ async function publishPrediction(req, res, ctx) {
   // try and forget
   axios({
     method: 'post',
-    url: process.env.PIPEDREAM_NEW_PREDICTION_ENDPOINT,
+    url: process.env.PIPEDREAM_ENDPOINT,
     data: {
+      event: 'prediction',
       predictor: predictorName,
       prediction: predictionText,
       link
@@ -52,7 +53,6 @@ async function resolvePrediction(req, res, ctx, isTrue) {
   const Predictor = await ctx._admin.findResource('predictor');
   let predictorRecord = await Predictor.findOne(ctx.record.param('predictor'));
   
-  
   let value = record.param('actualSignficance') + record.param('actualConfidence') +
     record.param('actualSpecificity');
 
@@ -60,12 +60,45 @@ async function resolvePrediction(req, res, ctx, isTrue) {
     value = 0 - value;
   }
 
-  let newScore = predictorRecord.param('currentScore') + value + record.param('bonusAdjustment');
+  let adjustment = value + record.param('bonusAdjustment');
+  let newScore = predictorRecord.param('currentScore') + adjustment;
 
   predictorRecord = await predictorRecord.update({
     currentScore: newScore
   });
   predictorRecord = await predictorRecord.save();
+
+  let predictorName = predictorRecord.param('name');
+  let predictionText = record.param('summary');
+  let pImg = record.param('imgUrl');
+  let pLink = record.param('link');
+  let link = '';
+  let points = `${adjustment} pts`;
+  let resolutionString = 'TRUE';
+
+  if (pImg) {
+    link = pImg;
+  } else if (pLink) {
+    link = pLink;
+  }
+  if (!isTrue) {
+    resolutionString = 'FALSE';
+  }
+
+  // try and forget
+  axios({
+    method: 'post',
+    url: process.env.PIPEDREAM_ENDPOINT,
+    data: {
+      event: 'resolution',
+      predictor: predictorName,
+      prediction: predictionText,
+      link,
+      points,
+      resolution: resolutionString
+    }
+  });
+
 
   record = await record.update({
     isResolved: true,
