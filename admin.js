@@ -1,9 +1,49 @@
 
+const axios = require('axios');
+
 const AdminBro = require('admin-bro');
 const AdminBroExpress = require('@admin-bro/express');
 const AdminBroMongoose = require('@admin-bro/mongoose');
 
 const { Predictor, Prediction, Tweet } = require('./db');
+
+async function publishPrediction(req, res, ctx) {
+
+  let record = ctx.record;
+
+  const Predictor = await ctx._admin.findResource('predictor');
+  let predictorRecord = await Predictor.findOne(ctx.record.param('predictor'));
+
+  let predictorName = predictorRecord.param('name');
+  let predictionText = record.param('summary');
+  let pImg = record.param('imgUrl');
+  let pLink = record.param('link');
+  let link = '';
+
+  if (pImg) {
+    link = pImg;
+  } else if (pLink) {
+    link = pLink;
+  }
+
+  // try and forget
+  axios({
+    method: 'post',
+    url: process.env.PIPEDREAM_NEW_PREDICTION_ENDPOINT,
+    data: {
+      predictor: predictorName,
+      prediction: predictionText,
+      link
+    }
+  });
+
+  record = await record.update({ isPublished: true });
+
+  return {
+    record: record.toJSON(ctx.currentAdmin),
+    redirectUrl: './show'
+  };
+}
 
 async function resolvePrediction(req, res, ctx, isTrue) {
 
@@ -71,6 +111,12 @@ const adminBro = new AdminBro({
         isResolved: { show: true, edit: false }
       },
       actions: {
+        publish: {
+          actionType: 'record',
+          icon: 'Send',
+          isVisible: true,
+          handler: publishPrediction
+        },
         resolveTrue: {
           actionType: 'record',
           icon: 'Checkmark',

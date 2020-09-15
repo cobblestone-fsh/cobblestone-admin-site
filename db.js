@@ -20,7 +20,6 @@ const Prediction = conn.model(`prediction`, new mongoose.Schema({
   summary: { type: String, required: true },
   predictor: { type: mongoose.ObjectId, ref: 'predictor' },
   details: String,
-  notes: String,
   imgUrl: String,
   link: String,
   qualifiedCategory: String, // like 2020.president.trump
@@ -33,6 +32,7 @@ const Prediction = conn.model(`prediction`, new mongoose.Schema({
   actualSpecificity: { type: Number, default: 0 },
   bonusAdjustment: { type: Number, default: 0 },
   resolutionNotes: String,
+  isPublished: { type: Boolean, default: false },
   isResolved: { type: Boolean, default: false },
   isResolvedTrue: Boolean,
   timeResolved: Date,
